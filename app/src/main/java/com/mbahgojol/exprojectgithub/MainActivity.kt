@@ -2,14 +2,18 @@ package com.mbahgojol.exprojectgithub
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mbahgojol.exprojectgithub.data.model.ResponseUserGithub
 import com.mbahgojol.exprojectgithub.databinding.ActivityMainBinding
 import com.mbahgojol.exprojectgithub.detail.DetailActivity
+import com.mbahgojol.exprojectgithub.favorite.FavoriteActivity
 import com.mbahgojol.exprojectgithub.utils.Result
 
 class MainActivity : AppCompatActivity() {
@@ -18,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     private val adapter by lazy {
         UserAdapter { user ->
             Intent(this, DetailActivity::class.java).apply {
-                putExtra("username", user.login)
+                putExtra("item", user)
                 startActivity(this)
             }
         }
@@ -33,6 +37,16 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.adapter = adapter
+
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                viewModel.getUser(p0.toString())
+                return true
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean = false
+
+        })
 
         viewModel.resultUser.observe(this) {
             when (it) {
@@ -50,4 +64,24 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.getUser()
     }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.favorite -> {
+                Intent(this, FavoriteActivity::class.java).apply {
+                    startActivity(this)
+                }
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }
+
+//Entity -> Table
+//Dao -> Kumpulan Query
+//AppDatabase -> Configurasi dari database room

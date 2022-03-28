@@ -16,6 +16,7 @@ android {
         versionName "1.0"
 
         buildConfigField("String", "API_URL", '"https://api.github.com/"')
+        buildConfigField("String", "TOKEN", '"token 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"')
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -62,6 +63,11 @@ dependencies {
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0'
 
+    def room_version = "2.4.2"
+
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-rxjava3:$room_version"
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
