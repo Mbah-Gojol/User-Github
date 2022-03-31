@@ -12,6 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ExProjectGithub">
         <activity
+            android:name=".setting.SettingActivity"
+            android:exported="false"
+            android:label="@string/setting" />
+        <activity
             android:name=".favorite.FavoriteActivity"
             android:exported="false"
             android:label="@string/favorite" />

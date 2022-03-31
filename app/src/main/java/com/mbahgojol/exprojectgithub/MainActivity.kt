@@ -7,13 +7,16 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mbahgojol.exprojectgithub.data.local.SettingPreferences
 import com.mbahgojol.exprojectgithub.data.model.ResponseUserGithub
 import com.mbahgojol.exprojectgithub.databinding.ActivityMainBinding
 import com.mbahgojol.exprojectgithub.detail.DetailActivity
 import com.mbahgojol.exprojectgithub.favorite.FavoriteActivity
+import com.mbahgojol.exprojectgithub.setting.SettingActivity
 import com.mbahgojol.exprojectgithub.utils.Result
 
 class MainActivity : AppCompatActivity() {
@@ -27,12 +30,22 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-    private val viewModel by viewModels<MainViewModel>()
+    private val viewModel by viewModels<MainViewModel> {
+        MainViewModel.Factory(SettingPreferences(this))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        viewModel.getTheme().observe(this) {
+            if (it) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
 
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.setHasFixedSize(true)
@@ -74,6 +87,11 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.favorite -> {
                 Intent(this, FavoriteActivity::class.java).apply {
+                    startActivity(this)
+                }
+            }
+            R.id.setting -> {
+                Intent(this, SettingActivity::class.java).apply {
                     startActivity(this)
                 }
             }

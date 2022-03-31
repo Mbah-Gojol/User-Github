@@ -6,4 +6,5 @@
     <string name="followers">Followers</string>
     <string name="following">Following</string>
     <string name="favorite">Favorite</string>
+    <string name="setting">Setting</string>
 </resources>
